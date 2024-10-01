@@ -30,4 +30,44 @@ router.get('/info/:userId', (req, res) => {
     });
 });
 
+router.patch('/info/update/:userId', (req, res) => {
+    const { userId } = req.params;  // Get userId from URL
+    const { username } = req.body;  // Get new username from request body
+
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required' });
+    }
+
+    // Check if the user exists and get their current username
+    const checkQuery = 'SELECT username FROM USER WHERE user_id = ?';
+    db.query(checkQuery, [userId], (err, results) => {
+        if (err) {
+            console.error('Error checking user:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentUsername = results[0].username;
+
+        // If the new username is the same as the current one, skip the update
+        if (currentUsername === username) {
+            return res.json({ message: 'Username is already up to date' });
+        }
+
+        // Proceed with the update if the username is different
+        const updateQuery = 'UPDATE USER SET username = ? WHERE user_id = ?';
+        db.query(updateQuery, [username, userId], (err, updateResults) => {
+            if (err) {
+                console.error('Error updating username:', err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            res.json({ message: 'Username updated successfully' });
+        });
+    });
+});
+
 module.exports = router;
