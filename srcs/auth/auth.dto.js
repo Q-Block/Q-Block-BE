@@ -9,7 +9,7 @@ export const tokenRefreshResponseDTO = (newRefreshToken) => ({
 
 export const authErrorResponseDTO = (message) => ({
   message
-});
+}); 
 
 export const tokenRefreshErrorResponseDTO = (message) => ({
   message

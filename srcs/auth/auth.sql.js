@@ -11,8 +11,8 @@ export const GET_USER_BY_NICKNAME_QUERY = `
 `;
 
 export const CREATE_USER_QUERY = `
-  INSERT INTO USER (status, email, password, nickname) 
-  VALUES ('active', ?, ?, ?)
+  INSERT INTO USER (email, password, nickname) 
+  VALUES (?, ?, ?)
 `;
 
 export const UPDATE_USER_REFRESH_TOKEN_QUERY = `

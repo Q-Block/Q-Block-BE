@@ -11,7 +11,7 @@ const extractTokenFromHeader = (req) => {
 
 function generateTokens(user_id, email) {
     const accessToken = jwt.sign({ user_id, email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    const refreshToken = jwt.sign({ user_id, getUserByEmail }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
+    const refreshToken = jwt.sign({ user_id, email }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 
     return { accessToken, refreshToken };
 }

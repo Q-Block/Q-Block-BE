@@ -34,7 +34,7 @@ const authenticateToken = (req, res, next) => {
 
     console.log("Decoded JWT:", decoded);
 
-    req.userId = decoded.userId;
+    req.userId = decoded.user_id;
     console.log("Authenticated userId:", req.userId);
     next();
   });

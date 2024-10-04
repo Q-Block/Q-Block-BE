@@ -4,7 +4,7 @@ import { userInfoDTO, updateNicknameResponseDTO, errorDTO } from './user.dto.js'
 
 export async function getUserInfo(req, res) {
   try {
-    const user_id = req.user_id;
+    const user_id = req.userId;
     console.log('Requested User ID:', user_id);
 
     if (!user_id) {
@@ -45,7 +45,7 @@ export async function getUserInfo(req, res) {
 
 export async function updateNickname(req, res) {
   try {
-    const user_id = req.user_id;
+    const user_id = req.userId;
     const { nickname } = req.body;
 
     if (!user_id || !nickname) {
@@ -83,7 +83,7 @@ export async function updateNickname(req, res) {
 }
 
 export async function logout(req, res) {
-  const user_id = req.user_id;
+  const user_id = req.userId;
 
   if (!user_id) {
     return res.status(400).json(response({

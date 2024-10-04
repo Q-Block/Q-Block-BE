@@ -9,11 +9,17 @@ import {
 } from './auth.sql.js';
 
 export async function getUserByEmail(email) {
-    console.log(`Fetching user by email: ${email}`);
-    const [rows] = await pool.query(GET_USER_BY_EMAIL_QUERY, [email]);
-    console.log(`Fetched user: ${JSON.stringify(rows[0])}`);
-    return rows[0];
+    try {
+        console.log(`Fetching user by email: ${email}`);
+        const [rows] = await pool.query(GET_USER_BY_EMAIL_QUERY, [email]);
+        console.log(`Fetched user: ${JSON.stringify(rows[0])}`);
+        return rows[0];
+    } catch (error) {
+        console.error(`Error fetching user by email: ${error.message}`);
+        throw error; // 필요에 따라 에러를 다시 던질 수 있습니다.
+    }
 }
+
 
 export async function getUserByNickname(nickname) {
     const [rows] = await pool.query(GET_USER_BY_NICKNAME_QUERY, [nickname]);
@@ -52,3 +58,4 @@ export async function getUserByRefreshToken(refreshToken) {
     const [rows] = await pool.query(GET_USER_BY_REFRESH_TOKEN_QUERY, [refreshToken]);
     return rows[0];
 }
+

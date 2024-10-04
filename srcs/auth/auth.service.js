@@ -1,24 +1,23 @@
 import bcrypt from 'bcryptjs';
-import * as AuthModel from './auth.model.js';  
 import { generateTokens } from '../utils/jwt.utils.js';
+import * as AuthModel  from './auth.model.js'; 
+
 
 export async function createUser(userDTO) {
     const { email, nickname, password } = userDTO;
-
-    // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 사용자 생성
-    return AuthModel.createUser({ ...userDTO, password: hashedPassword });
+    return AuthModel.createUser({ ...userDTO, password: hashedPassword });  // AuthModel을 통해 호출
 }
 
 export async function authenticateUser(email, password) {
-    const user = await AuthModel.getUserByEmail(email);
+    console.log(`인증 시도: ${email}`);
+    const user = await AuthModel.getUserByEmail(email); // AuthModel에서 가져오기
+    console.log(`가져온 사용자: ${user ? JSON.stringify(user) : '사용자 없음'}`);
     if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new Error('이메일 또는 비밀번호가 잘못되었습니다.');
     }
 
-    const { accessToken, refreshToken } = generateTokens(user.user_id, user.email);
+    const { accessToken, refreshToken } = generateTokens(user.user_id, email);
     await AuthModel.updateUserRefreshToken(user.user_id, refreshToken);
 
     return { accessToken, refreshToken };
